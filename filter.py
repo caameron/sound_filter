@@ -9,5 +9,7 @@ def filter(samples, length, frequency, rate):
 300 bits
 37.5 bytes
 
-length is equal to N in the article ?
+length is equal to N in the article ? I think
+returns two things? freqs and results
+
 '''
