@@ -1,4 +1,5 @@
 import numpy
+import wave as wav
 
 RATE = 48000.0
 LENGTH = 160.0
@@ -25,11 +26,6 @@ class constants:
 
 
 def filter(samples, length, target, const):
-
-    '''w0 is the target frequnecy of filter in radians
-    constant = constants()
-    constant.compute(target, length)'''
-
     '''Compute each sample'''
     first = 0.0
     second = 0.0
@@ -61,6 +57,29 @@ def testFilter(freq, const):
     filter(data, LENGTH, freq, const)
 
 
+
+'''Read in wav file and then parse the data so that it can be used with the filter above'''
+file = wav.open(sys.argv[1], 'rb')
+
+
+
+''' UNCOMMENT THIS TO TEST FILTER
+constant = constants()
+constant.compute(2025.0, LENGTH)
+print(constant.coef)
+print(constant.k)
+ch = 1825.0
+while(ch < 2525.0):
+    print(ch)
+    testFilter(ch, constant)
+    print("------------")
+    ch = ch + 50.0
+
+
+'''
+
+
+
 '''
 160 samples per bit
 300 bits
@@ -75,14 +94,3 @@ when the filter is run you get the maginitude back. That magnitude shoud spike a
 all other values should form a bell shaped curve.
 FIgure out the constants. Target frequency, block size, length, and so on.
 '''
-constant = constants()
-constant.compute(2025.0, LENGTH)
-print(constant.coef)
-print(constant.k)
-ch = 1825.0
-while(ch < 2525.0):
-    print(ch)
-    testFilter(ch, constant)
-    print("------------")
-    ch = ch + 50.0
-
