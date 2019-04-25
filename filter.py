@@ -1,5 +1,6 @@
 import numpy
 import wave as wav
+import sys
 
 RATE = 48000.0
 LENGTH = 160.0
@@ -60,7 +61,9 @@ def testFilter(freq, const):
 
 '''Read in wav file and then parse the data so that it can be used with the filter above'''
 file = wav.open(sys.argv[1], 'rb')
-
+frames = file.getnframes()
+samples = file.readframes(frames)
+print(file.getframerate()) '''this is 48000'''
 
 
 ''' UNCOMMENT THIS TO TEST FILTER
