@@ -1,6 +1,6 @@
 import numpy
 
-RATE = 48000
+RATE = 8000
 
 '''Implementation is of optimized version from
    https://www.embedded.com/design/configurable-systems/4024443/The-Goertzel-Algorithm
@@ -8,24 +8,26 @@ RATE = 48000
 
 class constants:
     '''class to hold data on  norm and coefficients'''
-    coef = 0
-    cosine = 0
-    sine = 0
-    k = 0
-    w0 = 0
+    def __init__(self):
+        self.coef = 0
+        self.cosine = 0
+        self.sine = 0
+        self.k = 0
+        self.w0 = 0
+
     def compute(self, freq, n):
-        k = ((n * freq)/ RATE)
-        w0 = ((2*numpy.pi*k) / n)
-        sine = numpy.sin(w0)
-        cosine = numpy.cos(w0)
-        coef = 2.0 * cosine
+        self.k = ((n * freq)/ RATE)
+        self.w0 = ((2*numpy.pi*self.k) / n)
+        self.sine = numpy.sin(self.w0)
+        self.cosine = numpy.cos(self.w0)
+        self.coef = 2.0 * self.cosine
 
 
 def filter(samples, length, target):
 
     '''w0 is the target frequnecy of filter in radians'''
     constant = constants()
-    x = constant.compute(target, length)
+    constant.compute(target, length)
 
     '''Compute each sample'''
     first = 0
@@ -36,8 +38,14 @@ def filter(samples, length, target):
         third = second
         second = first
 
+    print(constant.k)
+    print(constant.coef)
+
     '''compute optimized magnitude'''
-    mag = nupmy.power(second,2) + numpy.power(third,2) - second * third * constant.coef
+    mag = numpy.power(second,2) + numpy.power(third,2) - second * third * constant.coef
+    magsqrt = numpy.sqrt(mag)
+    print(mag)
+    print(magsqrt)
 
 '''
 160 samples per bit
@@ -48,6 +56,3 @@ length is equal to N in the article ? I think
 returns two things? freqs and results
 
 '''
-
-print(numpy.power(5,2))
-print(5*5)
