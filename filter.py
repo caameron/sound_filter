@@ -1,6 +1,7 @@
 import numpy
 import wave as wav
 import sys
+import scipy.io.wavfile as sci
 
 RATE = 48000.0
 LENGTH = 160.0
@@ -59,12 +60,17 @@ def testFilter(freq, const):
 
 
 
-'''Read in wav file and then parse the data so that it can be used with the filter above'''
+'''Read in wav file and then parse the data so that it can be used with the filter above
 file = wav.open(sys.argv[1], 'rb')
 frames = file.getnframes()
 samples = file.readframes(frames)
-print(file.getframerate()) '''this is 48000'''
+print(file.getframerate())'''
 
+samples = sci.read(sys.argv[1])
+print(samples)
+'''convert to floats'''
+samples = numpy.array(samples[1], dtype=float)
+print(samples)
 
 ''' UNCOMMENT THIS TO TEST FILTER
 constant = constants()
@@ -76,7 +82,7 @@ while(ch < 2525.0):
     print(ch)
     testFilter(ch, constant)
     print("------------")
-    ch = ch + 50.0
+    ch = ch + 20.0
 
 
 '''
