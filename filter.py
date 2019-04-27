@@ -11,8 +11,8 @@ LENGTH = 160.0
    https://www.embedded.com/design/configurable-systems/4024443/The-Goertzel-Algorithm
 '''
 
+''' class to hold coefficient data and calculate all other constants'''
 class constants:
-    '''class to hold data on  norm and coefficients'''
     def __init__(self):
         self.coef = 0.0
         self.cosine = 0.0
@@ -60,22 +60,16 @@ def testFilter(freq, const):
 
 
 
-'''Read in wav file and then parse the data so that it can be used with the filter above
-file = wav.open(sys.argv[1], 'rb')
-frames = file.getnframes()
-samples = file.readframes(frames)
-print(file.getframerate())'''
-
+'''Read in wav file and then parse the data so that it can be used with the filter above'''
 samples = sci.read(sys.argv[1])
 
 '''convert to floats'''
 samples = numpy.array(samples[1], dtype=float)
+
 ''' Get length of samples and divide by 160 (chunk length) to get how many chunks we need'''
 samplesLength = len(samples)
 chunks = samplesLength/160
-print(chunks)
 samples = numpy.split(samples, chunks)
-print(len(samples[0]))
 
 '''Create two instances of filter one for 2225Hz and one for 2025Hz'''
 constantMark = constants()
@@ -84,7 +78,7 @@ constantSpace = constants()
 constantSpace.compute(2025.0, LENGTH)
 
 
-'''go through all chunks, and for each 10 bits add them to the chunk10 array'''
+'''go through all chunks and apply filter to each sample, and for each 10 bits add them to the chunk10 array'''
 bits = []
 d = 0
 while(d < chunks):
@@ -121,7 +115,10 @@ for char in asciiBytes:
 
     decodedMessage = decodedMessage + chr(int(bitString, 2))
 
+'''Print out the decoded Message which is the answer to the HW'''
 print(decodedMessage)
+
+
 
 ''' UNCOMMENT THIS TO TEST FILTER
 constant = constants()
@@ -135,20 +132,19 @@ while(ch < 2525.0):
     print("------------")
     ch = ch + 20.0
 
-
 '''
 
 '''
+NOTES TO HELP WITH HW
 160 samples per bit
 300 bits
-37.5 bytes
 
-length is equal to N in the article ? I think
+length is equal to N in the article ?
 returns two things? freqs and results
 
 Should use the optimized filter that was in the embedded article it is easier and faster.
 
 when the filter is run you get the maginitude back. That magnitude shoud spike at the target frequency
 all other values should form a bell shaped curve.
-FIgure out the constants. Target frequency, block size, length, and so on.
+Figure out the constants. Target frequency, block size, length, and so on.
 '''
