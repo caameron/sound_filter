@@ -40,8 +40,6 @@ def filter(samples, length, const):
     '''compute optimized magnitude'''
     mag = numpy.power(second,2.0) + numpy.power(third,2.0) - second * third * const.coef
     magsqrt = numpy.sqrt(mag)
-    print("MAGNITUDE========", mag)
-    print("SQRT=======", magsqrt)
     return magsqrt
 
 
@@ -84,9 +82,11 @@ constantMark.compute(2225.0, LENGTH)
 constantSpace = constants()
 constantSpace.compute(2025.0, LENGTH)
 
+
+'''go through all chunks, and for each 10 bits add them to the chunk10 array'''
 bits = []
 d = 0
-while(d < 10):
+while(d < chunks):
     mark = filter(samples[d], LENGTH, constantMark)
     space = filter(samples[d], LENGTH, constantSpace)
     if(mark > space):
@@ -95,7 +95,12 @@ while(d < 10):
         bits.append(0)
     d = d + 1
 
-print(bits)
+bits = numpy.array(bits)
+howManyChunks = len(bits)/10
+chunks10 = numpy.split(bits, howManyChunks)
+
+'''Go through each chunk to verify start and stop bit and to change order to big-endian'''
+
 
 
 ''' UNCOMMENT THIS TO TEST FILTER
