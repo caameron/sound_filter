@@ -2,6 +2,7 @@ import numpy
 import wave as wav
 import sys
 import scipy.io.wavfile as sci
+import binascii as bina
 
 RATE = 48000.0
 LENGTH = 160.0
@@ -108,9 +109,19 @@ for chunk in chunks10:
     fliped = numpy.flip(chunk, 0)
     middleByte = numpy.delete(fliped, 0, 0)
     middleByte = numpy.delete(middleByte, 8, 0)
-    print(middleByte)
+    asciiBytes.append(middleByte)
 
 
+'''Convert asciiBytes into characters'''
+decodedMessage = ""
+for char in asciiBytes:
+    bitString = ""
+    for bit in char:
+        bitString = bitString + str(bit)
+
+    decodedMessage = decodedMessage + chr(int(bitString, 2))
+
+print(decodedMessage)
 
 ''' UNCOMMENT THIS TO TEST FILTER
 constant = constants()
@@ -126,8 +137,6 @@ while(ch < 2525.0):
 
 
 '''
-
-
 
 '''
 160 samples per bit
