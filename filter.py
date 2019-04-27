@@ -67,10 +67,15 @@ samples = file.readframes(frames)
 print(file.getframerate())'''
 
 samples = sci.read(sys.argv[1])
-print(samples)
+
 '''convert to floats'''
 samples = numpy.array(samples[1], dtype=float)
-print(samples)
+''' Get length of samples and divide by 160 (chunk length) to get how many chunks we need'''
+samplesLength = len(samples)
+chunks = samplesLength/160
+print(chunks)
+samples = numpy.split(samples, chunks)
+print(len(samples[0]))
 
 ''' UNCOMMENT THIS TO TEST FILTER
 constant = constants()
