@@ -100,6 +100,15 @@ howManyChunks = len(bits)/10
 chunks10 = numpy.split(bits, howManyChunks)
 
 '''Go through each chunk to verify start and stop bit and to change order to big-endian'''
+asciiBytes = []
+for chunk in chunks10:
+    if(chunk[0] != 0 or chunk[9] != 1):
+        print("ERROR::::: Start bit not 0 OR Stop bit not 1")
+        break
+    fliped = numpy.flip(chunk, 0)
+    middleByte = numpy.delete(fliped, 0, 0)
+    middleByte = numpy.delete(middleByte, 8, 0)
+    print(middleByte)
 
 
 
