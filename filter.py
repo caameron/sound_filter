@@ -27,7 +27,7 @@ class constants:
         self.coef = 2.0 * self.cosine
 
 
-def filter(samples, length, target, const):
+def filter(samples, length, const):
     '''Compute each sample'''
     first = 0.0
     second = 0.0
@@ -40,8 +40,9 @@ def filter(samples, length, target, const):
     '''compute optimized magnitude'''
     mag = numpy.power(second,2.0) + numpy.power(third,2.0) - second * third * const.coef
     magsqrt = numpy.sqrt(mag)
-    print(mag)
-    print(magsqrt)
+    print("MAGNITUDE========", mag)
+    print("SQRT=======", magsqrt)
+    return magsqrt
 
 
 def testFilter(freq, const):
@@ -56,7 +57,7 @@ def testFilter(freq, const):
         data.append(100.0 * numpy.sin(wave * count))
         count = count + 1
 
-    filter(data, LENGTH, freq, const)
+    filter(data, LENGTH, const)
 
 
 
@@ -76,6 +77,26 @@ chunks = samplesLength/160
 print(chunks)
 samples = numpy.split(samples, chunks)
 print(len(samples[0]))
+
+'''Create two instances of filter one for 2225Hz and one for 2025Hz'''
+constantMark = constants()
+constantMark.compute(2225.0, LENGTH)
+constantSpace = constants()
+constantSpace.compute(2025.0, LENGTH)
+
+bits = []
+d = 0
+while(d < 10):
+    mark = filter(samples[d], LENGTH, constantMark)
+    space = filter(samples[d], LENGTH, constantSpace)
+    if(mark > space):
+        bits.append(1)
+    else:
+        bits.append(0)
+    d = d + 1
+
+print(bits)
+
 
 ''' UNCOMMENT THIS TO TEST FILTER
 constant = constants()
